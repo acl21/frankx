@@ -59,6 +59,11 @@ class CMakeBuild(build_ext):
             '-DCMAKE_POSITION_INDEPENDENT_CODE=ON',
         ]
 
+        # Prefer explicitly provided Franka package location over a hardcoded path.
+        franka_dir = os.environ.get('FRANKA_DIR')
+        if franka_dir:
+            cmake_args.append(f'-DFranka_DIR={franka_dir}')
+
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
 

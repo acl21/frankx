@@ -1,6 +1,8 @@
 [submodule "ruckig"]
 	path = ruckig
 	url = ../ruckig.git
+	branch = frankx
 [submodule "affx"]
 	path = affx
 	url = ../affx.git
+	branch = frankx

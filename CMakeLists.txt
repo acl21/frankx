@@ -43,6 +43,9 @@ add_library(frankx
 target_compile_features(frankx PUBLIC cxx_std_17)
 target_include_directories(frankx PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(frankx PUBLIC Franka::Franka Eigen3::Eigen movex ${orocos_kdl_LIBRARIES} ${urdfdom_LIBRARIES} ${kdl_parser_LIBRARIES})
+if(TARGET kdl_parser::kdl_parser)
+  target_link_libraries(frankx PUBLIC kdl_parser::kdl_parser)
+endif()
 
 
 if(BUILD_PYTHON_MODULE)
@@ -50,8 +53,8 @@ if(BUILD_PYTHON_MODULE)
   if(EXISTS pybind11)
     add_subdirectory(pybind11)
   else()
-    find_package(Python COMPONENTS Interpreter Development)
-    find_package(pybind11 2.6 REQUIRED)
+    find_package(Python3 COMPONENTS Interpreter Development.Module REQUIRED)
+    find_package(pybind11 2.13 REQUIRED)
   endif()
 
   if(USE_PYTHON_EXTENSION)

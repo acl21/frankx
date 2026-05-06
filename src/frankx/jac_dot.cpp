@@ -1,13 +1,25 @@
-#pragma once
-
 #include <optional>
 
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <frankx/jac_dot.hpp>
 #include <urdf_model/model.h>
+#if __has_include(<urdf_parser/urdf_parser.h>)
 #include <urdf_parser/urdf_parser.h>
+#elif __has_include(<urdfdom/urdf_parser/urdf_parser.h>)
+#include <urdfdom/urdf_parser/urdf_parser.h>
+#else
+#error "urdf_parser header not found"
+#endif
+#if __has_include(<kdl_parser/kdl_parser.hpp>)
 #include <kdl_parser/kdl_parser.hpp>
+#elif __has_include(<kdl_parser/kdl_parser/kdl_parser.hpp>)
+#include <kdl_parser/kdl_parser/kdl_parser.hpp>
+#elif __has_include("/opt/ros/jazzy/include/kdl_parser/kdl_parser/kdl_parser.hpp")
+#include "/opt/ros/jazzy/include/kdl_parser/kdl_parser/kdl_parser.hpp"
+#else
+#error "kdl_parser header not found"
+#endif
 #include <kdl/chainjnttojacdotsolver.hpp>
 #include <kdl/frames_io.hpp>
 
@@ -22,8 +34,7 @@ JacDot::JacDot(std::string urdf_path) {
         std::cerr << "Could not extract kdl tree" << std::endl;
         exit(1);
     }    
-    
-    bool exit_value;
+
     if (!panda_tree.getChain("panda_link0", "EE", panda_chain)) {
         std::cerr << "Could not extract kdl chain" << std::endl;
         exit(1);
